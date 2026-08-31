@@ -48,11 +48,12 @@ Use this asymmetry deliberately:
 
 - Offload broad searches, inventory, call-path tracing, test-gap discovery, and first-pass review to Luna.
 - Ask workers for concise conclusions with exact files, symbols, line references, commands, and evidence.
-- Let the commander read the cited evidence and changed code rather than repeating the worker's entire repository scan.
+- For deterministic read-only discovery such as symbol lookup and call-stack tracing, treat a worker's cited report as the discovery result. Do not reopen the cited source merely to repeat the same trace.
+- Use one Luna worker for a coherent read-only trace even when it crosses many files. Add workers only for genuinely independent judgment-heavy risk domains, not duplicate discovery.
 - Keep architecture decisions, disputed findings, edits, complete-diff ownership, and final approval with the commander.
 - Avoid overlapping broad worker scopes: cheap duplication is still waste when it produces no independent coverage.
 
-Credit efficiency never justifies accepting an unsupported worker conclusion. It changes where discovery happens, not who owns correctness.
+A cited worker report is sufficient for mechanical read-only discovery. Ask the same worker a focused follow-up when evidence is missing or internally inconsistent. Independent commander verification remains required for code changes and for conclusions that depend on ambiguous runtime behavior, security judgment, or architecture rather than a deterministic source trace.
 
 ## Commander's Workflow
 
@@ -85,10 +86,11 @@ Treat work as **cross-cutting** when any of these apply:
 For cross-cutting work with at least two separable risk domains and available Herdr capacity:
 
 1. Delegate early, during discovery and planning—not only after implementation.
-2. Use two or more focused workers when their scopes are genuinely independent. Prefer two or three; exceed three only when the decomposition clearly warrants it.
-3. Give each worker one risk domain, such as dependency tracing, invariant analysis, state-transition review, compatibility analysis, operational impact, or test-gap analysis.
-4. Prefer read-only discovery workers when file ownership would overlap; the commander can then implement from their cited evidence without duplicating their full scan.
-5. Reserve a separate post-implementation reviewer when practical, but keep that review focused on the acceptance criteria and changed diff. A single broad final reviewer does **not** substitute for early domain decomposition.
+2. Use one worker when the task is a coherent deterministic read-only trace, even if it crosses many files.
+3. Use two or more focused workers only when scopes require genuinely independent judgment. Prefer two or three; exceed three only when the decomposition clearly warrants it.
+4. Give each additional worker one risk domain, such as invariant analysis, state-transition review, compatibility analysis, operational impact, or test-gap analysis. Do not split mechanical dependency tracing into overlapping workers.
+5. Prefer read-only discovery workers when file ownership would overlap; the commander should use their cited evidence without duplicating their source scan.
+6. For code changes, reserve a separate post-implementation reviewer when practical, but keep that review focused on the acceptance criteria and changed diff. A single broad final reviewer does **not** substitute for early domain decomposition when multiple judgment-heavy risk domains exist.
 
 Delegation may still be skipped when tasks cannot be separated without duplication, worker setup would cost more than the task, relevant context cannot safely be shared, or all work is security-sensitive architecture that must remain with the commander. Record that reason in the working plan instead of silently defaulting to one or zero workers.
 
@@ -171,13 +173,14 @@ For shared working trees, assign disjoint files whenever multiple workers may ed
 - Use `herdr agent prompt ... --wait` and inspect settled state.
 - If a worker is blocked, read its terminal output. Do not answer approval or security prompts without user authorization.
 - Redirect a worker when it exceeds scope, misunderstands requirements, or performs unrelated cleanup.
-- Do not accept a worker's summary as evidence; inspect its cited locations and the actual working tree or diff. Do not automatically repeat its broad search when focused verification is sufficient.
+- For deterministic read-only lookup or call-stack tracing, accept a concise report with exact citations as evidence and do not repeat the source scan. Use a focused follow-up only when the report exposes a gap, conflict, or uncertainty.
+- For worker edits, inspect the actual working tree and complete diff; a summary never substitutes for code review.
 
-Workers may be asked to revise their own bounded work, but the commander must independently validate it.
+Workers may be asked to revise their own bounded work. The commander must independently validate worker-produced code and judgment-heavy conclusions, but not mechanically retrace a complete read-only call stack.
 
 ### 6. Review and integrate
 
-After worker completion, the commander must:
+After a worker edits code, the commander must:
 
 1. Inspect `git status` and the complete diff.
 2. Attribute every changed line to the requested goal and detect overlapping/unexpected edits.
@@ -191,7 +194,7 @@ For nontrivial changes, use a separate Pi `openai-codex/gpt-5.6-luna` worker as 
 
 ## Final Accountability
 
-The commander—not Pi workers or Herdr—is responsible for the final answer and code quality. Never claim success based solely on worker output.
+The commander—not Pi workers or Herdr—is responsible for the final answer and code quality. Code-change success must never be claimed solely from worker output. Deterministic read-only discovery may rely directly on a worker's precise, cited report without duplicate commander verification.
 
 The final response should briefly report:
 
