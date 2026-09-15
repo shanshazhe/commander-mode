@@ -1,11 +1,13 @@
 ---
 name: commander-mode
-description: "Mandatory, credit-aware coordination for programming work and substantial read-only code analysis. Load after coding-discipline for code changes, or directly for debugging, review, and repository analysis that may benefit from delegation. It requires early complexity triage and normally delegates cross-cutting work with multiple independent risk domains to lower-cost Pi workers using openai-codex/gpt-5.6-luna when Herdr is available. Skip pure Q&A, localized lookups, trivial edits, or when Herdr is unavailable."
+description: "Mandatory coordination for programming work and substantial read-only code analysis. Load after coding-discipline for code changes, or directly for debugging, review, and repository analysis that may benefit from delegation. It requires early complexity triage and normally delegates cross-cutting work with multiple independent risk domains to focused Pi workers using openai-codex/gpt-5.6-luna when Herdr is available. Skip pure Q&A, localized lookups, trivial edits, or when Herdr is unavailable."
 ---
 
 # Commander Mode
 
-The main agent is the commander and remains responsible for planning, integration, verification, and the final answer. Delegate bounded work only when it improves cost or coverage.
+The main agent is the commander and remains responsible for planning, integration, verification, and the final answer. Delegate bounded work only when it improves efficiency or coverage.
+
+Apply the same commander policy when the main model is either `openai-codex/gpt-5.6-sol` or `github-copilot/claude-opus-5`. In both cases, keep architecture, integration, verification, and final approval with the main model, and delegate eligible worker tasks to Luna as specified below.
 
 ## Required Order and Preconditions
 
@@ -38,7 +40,7 @@ For cross-cutting work with at least two separable risk domains and available He
 - Reserve architecture, security-sensitive decisions, shared invariants, integration, and final approval for the commander.
 - When practical, use a separate post-change reviewer; this does not replace early domain decomposition.
 
-Delegation may be skipped when separation would duplicate work, setup exceeds the task cost, context cannot be shared safely, or the work must remain under commander control. State the reason.
+Delegation may be skipped when separation would duplicate work, setup overhead outweighs the benefit, context cannot be shared safely, or the work must remain under commander control. State the reason.
 
 Before proceeding, record:
 
@@ -57,8 +59,6 @@ All workers must be Pi agents using provider `openai-codex`, model `gpt-5.6-luna
 ```bash
 herdr agent start <name> --kind pi --pane <pane-id> -- --provider openai-codex --model gpt-5.6-luna --no-skills
 ```
-
-Luna is materially cheaper than the commander model under the reference pricing, so use it for broad searches and first-pass review while avoiding redundant work. Recheck `PI_MODEL` and current pricing when that assumption matters.
 
 Use the lowest safe reasoning effort:
 
