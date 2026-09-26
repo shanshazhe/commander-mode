@@ -1,13 +1,13 @@
 ---
 name: commander-mode
-description: "Mandatory coordination for programming work and substantial read-only code analysis. Load after coding-discipline for code changes, or directly for debugging, review, and repository analysis that may benefit from delegation. It requires early complexity triage and normally delegates cross-cutting work with multiple independent risk domains to focused Pi workers using openai-codex/gpt-5.6-luna when Herdr is available. Skip pure Q&A, localized lookups, trivial edits, or when Herdr is unavailable."
+description: "Mandatory coordination for programming work and substantial read-only code analysis. Load after coding-discipline for code changes, or directly for debugging, review, and repository analysis that may benefit from delegation. It requires early complexity triage and normally delegates cross-cutting work with multiple independent risk domains to focused Pi workers using openai-codex/gpt-6-luna when Herdr is available. Skip pure Q&A, localized lookups, trivial edits, or when Herdr is unavailable."
 ---
 
 # Commander Mode
 
 The main agent is the commander and remains responsible for planning, integration, verification, and the final answer. Delegate bounded work only when it improves efficiency or coverage.
 
-Apply the same commander policy when the main model is either `openai-codex/gpt-5.6-sol` or `github-copilot/claude-opus-5`. In both cases, keep architecture, integration, verification, and final approval with the main model, and delegate eligible worker tasks to Luna as specified below.
+Apply the same commander policy when the main model is either `openai-codex/gpt-6-sol` or `github-copilot/claude-opus-5.5`. In both cases, keep architecture, integration, verification, and final approval with the main model, and delegate eligible worker tasks to Luna as specified below.
 
 ## Required Order and Preconditions
 
@@ -54,10 +54,10 @@ Delegation: <worker scopes, or reason for skipping>
 
 Use workers for bounded discovery, call-path tracing, mechanical edits, explicit tests, focused checks, or independent review—not underspecified architecture, subtle security/concurrency decisions, conflict resolution, or final approval.
 
-All workers must be Pi agents using provider `openai-codex`, model `gpt-5.6-luna`, and no skills:
+All workers must be Pi agents using provider `openai-codex`, model `gpt-6-luna`, and no skills:
 
 ```bash
-herdr agent start <name> --kind pi --pane <pane-id> -- --provider openai-codex --model gpt-5.6-luna --no-skills
+herdr agent start <name> --kind pi --pane <pane-id> -- --provider openai-codex --model gpt-6-luna --no-skills
 ```
 
 Use the lowest safe reasoning effort:
