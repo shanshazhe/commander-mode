@@ -98,7 +98,7 @@ A review worker supplements but never replaces the commander's review.
 
 ## Completion
 
-After all programming work is complete, stop task workers and close every Herdr pane created by the commander for that task. Never close panes that existed before the task began or were not created by the commander.
+Treat each Herdr pane created for a worker as scoped to that worker's assigned task. As soon as its work is finished and its output has been collected, or the pane is otherwise no longer needed, stop the worker and close the pane immediately; do not leave unused panes open until the overall programming task ends. Before the final response, check that no panes created by the commander for this task remain open. Never close panes that existed before the task began or were not created by the commander.
 
 The final response should briefly state:
 
