@@ -7,7 +7,7 @@ description: "Mandatory coordination for programming work and substantial read-o
 
 The main agent is the commander and remains responsible for planning, integration, verification, and the final answer. Delegate bounded work only when it improves efficiency or coverage.
 
-Apply the same commander policy when the main model is either `openai-codex/gpt-6-sol` or `github-copilot/claude-opus-5.5`. In both cases, keep architecture, integration, verification, and final approval with the main model, and delegate eligible worker tasks to Luna as specified below.
+Apply the same commander policy when the main model is either `openai-codex/gpt-6.1-sol` or `github-copilot/claude-opus-5.5`. In both cases, keep architecture, integration, verification, and final approval with the main model, and delegate eligible worker tasks to Luna as specified below.
 
 ## Required Order and Preconditions
 
